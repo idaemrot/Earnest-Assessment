@@ -9,26 +9,31 @@ import {
   toggleTask,
 } from '../controllers/task.controller'
 import { authenticate } from '../middleware/auth.middleware'
+import { validate } from '../middleware/validate.middleware'
+import {
+  createTaskSchema,
+  updateTaskSchema,
+  getTasksQuerySchema,
+} from '../validators/task.validators'
 
 const router = Router()
 
 // ── Public ─────────────────────────────────────────────────────────────────
-// Health check — no auth required
 router.get('/test', testTask)
 
 // ── Protected ──────────────────────────────────────────────────────────────
-// All task endpoints below require a valid access token
 router.use(authenticate)
 
-router.get('/', getAllTasks)
-router.post('/', createTask)
+// Collection routes
+router.get('/',    validate(getTasksQuerySchema, 'query'), getAllTasks)
+router.post('/',   validate(createTaskSchema),             createTask)
 
-// Specific sub-resource routes BEFORE generic /:id to avoid param capture
+// Specific sub-resource before generic /:id  (prevents 'toggle' → :id capture)
 router.patch('/:id/toggle', toggleTask)
 
 // Generic /:id routes
-router.get('/:id', getTaskById)
-router.patch('/:id', updateTask)
+router.get('/:id',    getTaskById)
+router.patch('/:id',  validate(updateTaskSchema), updateTask)
 router.delete('/:id', deleteTask)
 
 export default router

@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
+import { ZodError } from 'zod'
 import { TokenExpiredError, JsonWebTokenError } from 'jsonwebtoken'
 import { AppError } from '../utils/AppError'
 
@@ -30,6 +31,22 @@ export const errorHandler = (
     res.status(err.statusCode).json({
       success: false,
       message: err.message,
+    })
+    return
+  }
+
+  // ── Zod validation error ────────────────────────────────────────────────────
+  // Formats field-level issues into a structured 400 with an 'errors' array:
+  //   { success: false, message: "Validation failed", errors: [{ field, message }] }
+  if (err instanceof ZodError) {
+    const errors = err.issues.map((issue: import('zod').ZodIssue) => ({
+      field: issue.path.join('.') || 'root',
+      message: issue.message,
+    }))
+    res.status(400).json({
+      success: false,
+      message: 'Validation failed',
+      errors,
     })
     return
   }
