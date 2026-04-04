@@ -1,3 +1,4 @@
-// This file is deprecated — the app now uses Next.js App Router (app/page.tsx)
-// Delete this file manually.
-export {}
+// This file is deprecated. Please delete it.
+export default function DeprecatedHome() {
+  return null;
+}
