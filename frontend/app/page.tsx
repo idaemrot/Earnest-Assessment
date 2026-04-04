@@ -25,18 +25,6 @@ export default function Home() {
       {/* ─── Dot grid overlay ──────────────────────────────────────────────── */}
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48L3N2Zz4=')] [mask-image:linear-gradient(to_bottom,white,transparent)] pointer-events-none" />
 
-      {/* ─── Global Top Notification ───────────────────────────────────────── */}
-      <div className="relative z-50 w-full bg-red-500/10 border-b border-red-500/20 backdrop-blur-md animate-fade-in-up">
-        <div className="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-center gap-2.5 text-xs sm:text-sm">
-          <span className="relative flex h-2.5 w-2.5 shrink-0">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
-          </span>
-          <p className="text-red-200">
-            <strong className="font-semibold text-red-300">Render Free Tier:</strong> The backend sleeps on inactivity. Your first request may take up to <span className="font-bold underline decoration-red-500/50 underline-offset-2">60 seconds</span> to resolve. <span className="opacity-90 pl-1">Sorry for the inconvenience - Manish Daemrot</span>
-          </p>
-        </div>
-      </div>
 
       {/* ─── Navbar ────────────────────────────────────────────────────────── */}
       <header className="relative z-10 w-full max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">

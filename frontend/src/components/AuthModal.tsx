@@ -19,18 +19,18 @@ interface FormErrors {
   confirmPassword?: string
 }
 
-const hasUpper  = (s: string) => /[A-Z]/.test(s)
+const hasUpper = (s: string) => /[A-Z]/.test(s)
 const hasNumber = (s: string) => /[0-9]/.test(s)
 const hasLength = (s: string) => s.length >= 8
 
 function StrengthBar({ password }: { password: string }) {
   if (!password) return null
   const checks = [hasLength(password), hasUpper(password), hasNumber(password)]
-  const score  = checks.filter(Boolean).length
+  const score = checks.filter(Boolean).length
   const colors = ['bg-red-500', 'bg-amber-400', 'bg-teal-500']
   const labels = ['Weak', 'Fair', 'Strong']
-  const tClrs  = ['text-red-400', 'text-amber-400', 'text-teal-400']
-  
+  const tClrs = ['text-red-400', 'text-amber-400', 'text-teal-400']
+
   return (
     <div className="mt-2 space-y-1.5">
       <div className="flex gap-1">
@@ -60,7 +60,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
   const overlayRef = useRef<HTMLDivElement>(null)
 
   const [mode, setMode] = useState<'login' | 'register'>(initialMode)
-  
+
   // Reset form when opening or changing mode
   useEffect(() => {
     if (isOpen) {
@@ -90,15 +90,15 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
     }
   }, [isOpen, onClose])
 
-  const [name, setName]                       = useState('')
-  const [email, setEmail]                     = useState('')
-  const [password, setPassword]               = useState('')
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [showPw, setShowPw]                   = useState(false)
-  const [showConfirm, setShowConfirm]         = useState(false)
-  const [errors, setErrors]                   = useState<FormErrors>({})
-  const [apiError, setApiError]               = useState('')
-  const [loading, setLoading]                 = useState(false)
+  const [showPw, setShowPw] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
+  const [errors, setErrors] = useState<FormErrors>({})
+  const [apiError, setApiError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   if (!isOpen) return null
 
@@ -114,19 +114,19 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
       if (!name.trim()) errs.name = 'Name is required'
     }
 
-    if (!email.trim())                                    errs.email = 'Email is required'
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))   errs.email = 'Enter a valid email address'
-    
-    if (!password)                                        errs.password = 'Password is required'
+    if (!email.trim()) errs.email = 'Email is required'
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errs.email = 'Enter a valid email address'
+
+    if (!password) errs.password = 'Password is required'
     else if (mode === 'register') {
-      if (!hasLength(password))                         errs.password = 'Must be at least 8 characters'
-      else if (!hasUpper(password))                     errs.password = 'Must contain at least one uppercase letter'
-      else if (!hasNumber(password))                    errs.password = 'Must contain at least one number'
-      
-      if (!confirmPassword)                             errs.confirmPassword = 'Please confirm your password'
-      else if (confirmPassword !== password)            errs.confirmPassword = 'Passwords do not match'
+      if (!hasLength(password)) errs.password = 'Must be at least 8 characters'
+      else if (!hasUpper(password)) errs.password = 'Must contain at least one uppercase letter'
+      else if (!hasNumber(password)) errs.password = 'Must contain at least one number'
+
+      if (!confirmPassword) errs.confirmPassword = 'Please confirm your password'
+      else if (confirmPassword !== password) errs.confirmPassword = 'Passwords do not match'
     }
-    
+
     setErrors(errs)
     return Object.keys(errs).length === 0
   }
@@ -183,18 +183,18 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
     `w-full pl-10 pr-11 py-2.5 rounded-xl text-sm text-gray-100 placeholder-gray-600 bg-gray-800/80 border transition-colors outline-none focus:ring-2 ${err ? 'border-red-500/60 focus:border-red-500 focus:ring-red-500/20' : 'border-gray-700 focus:border-teal-500/60 focus:ring-teal-500/20'}`
 
   return (
-    <div 
+    <div
       ref={overlayRef}
       onMouseDown={handleOverlayClick}
       className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-950/60 backdrop-blur-sm transition-opacity"
     >
       <div className="relative w-full max-w-md bg-gray-900 border border-gray-800 rounded-3xl shadow-2xl overflow-hidden shadow-teal-500/10 animate-fade-in-up">
-        
+
         {/* Glow effect */}
         <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-teal-500 via-cyan-500 to-teal-500 opacity-50" />
-        
+
         {/* Close Button */}
-        <button 
+        <button
           onClick={onClose}
           className="absolute top-4 right-4 p-2 rounded-full text-gray-500 hover:text-white hover:bg-gray-800 transition-colors z-10"
         >
@@ -209,10 +209,29 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
               {mode === 'login' ? 'Welcome back' : 'Create your account'}
             </h2>
             <p className="text-sm text-gray-400 mt-2">
-              {mode === 'login' 
-                ? 'Sign in to continue to MANAGER' 
+              {mode === 'login'
+                ? 'Sign in to continue to MANAGER'
                 : 'Start managing your tasks with MANAGER'}
             </p>
+          </div>
+
+          <div className="mb-6 bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-sm">
+            <div className="flex items-start gap-3">
+              <div className="mt-0.5 p-1 bg-red-500/20 rounded-md">
+                <svg className="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+              <div className="flex-1 text-red-200 leading-relaxed">
+                <strong className="font-semibold text-red-300 block mb-1">Quick heads-up! ✌️</strong>
+                <p className="mb-2.5">
+                  Since this is hosted on a free tier, the server might be asleep right now. Don't worry if your {mode === 'login' ? 'first login' : 'first signup'} takes up to <span className="font-bold underline decoration-red-500/50 underline-offset-2">30 seconds</span>, Sorry for the wait, it's just waking up!
+                </p>
+                <div className="pt-3 mt-1 border-t border-red-500/20 text-[10px] sm:text-[11px] uppercase tracking-wider font-semibold opacity-80 space-y-1">
+                  <div className="text-red-200/90">(Manish Daemrot 2K22/MC/088)</div>
+                </div>
+              </div>
+            </div>
           </div>
 
           {apiError && (
@@ -268,8 +287,8 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
                 />
                 <button type="button" onClick={() => setShowPw(v => !v)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-400 transition-colors" tabIndex={-1}>{showEyeIcon(showPw)}</button>
               </div>
-              {errors.password 
-                ? <p className="mt-1.5 flex items-center gap-1 text-xs text-red-400">{errIcon}{errors.password}</p> 
+              {errors.password
+                ? <p className="mt-1.5 flex items-center gap-1 text-xs text-red-400">{errIcon}{errors.password}</p>
                 : mode === 'register' && <StrengthBar password={password} />
               }
             </div>
@@ -290,7 +309,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
                 {errors.confirmPassword
                   ? <p className="mt-1.5 flex items-center gap-1 text-xs text-red-400">{errIcon}{errors.confirmPassword}</p>
                   : confirmPassword && confirmPassword === password &&
-                    <p className="mt-1.5 flex items-center gap-1 text-xs text-teal-400"><svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>Passwords match</p>
+                  <p className="mt-1.5 flex items-center gap-1 text-xs text-teal-400"><svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>Passwords match</p>
                 }
               </div>
             )}
@@ -298,8 +317,8 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
             <button type="submit" disabled={loading}
               className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold bg-teal-500 hover:bg-teal-400 text-gray-950 shadow-lg shadow-teal-500/25 transition-all disabled:opacity-60 disabled:cursor-not-allowed mt-4"
             >
-              {loading 
-                ? <><svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" /></svg>Please wait…</> 
+              {loading
+                ? <><svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" /></svg>Please wait…</>
                 : mode === 'login' ? 'Sign in' : 'Create account'
               }
             </button>
@@ -308,8 +327,8 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
           {/* Footer Toggle */}
           <div className="mt-8 text-center text-sm text-gray-400">
             {mode === 'login' ? "Don't have an account? " : "Already have an account? "}
-            <button 
-              type="button" 
+            <button
+              type="button"
               onClick={toggleMode}
               className="text-white font-medium hover:text-teal-400 transition-colors"
             >
