@@ -1,4 +1,6 @@
-import type { Task } from '../services/task.service'
+'use client'
+
+import type { Task } from '@/services/task.service'
 
 interface TaskCardProps {
   task: Task

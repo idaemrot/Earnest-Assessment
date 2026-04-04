@@ -1,4 +1,4 @@
-import api, { tokenStorage } from './api'
+import api, { tokenStorage } from '@/services/api'
 
 // ─── Response types ───────────────────────────────────────────────────────────
 

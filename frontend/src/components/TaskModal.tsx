@@ -1,5 +1,7 @@
+'use client'
+
 import { useEffect, useRef, useState } from 'react'
-import type { Task, TaskStatus } from '../services/task.service'
+import type { Task, TaskStatus } from '@/services/task.service'
 
 interface TaskModalProps {
   isOpen: boolean

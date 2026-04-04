@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom'
+'use client'
+
+import Link from 'next/link'
 
 interface NavbarProps {
   username?: string
@@ -12,12 +14,11 @@ export default function Navbar({ username = 'User', onLogout }: NavbarProps) {
       <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
 
         {/* Logo */}
-        <Link to="/dashboard" className="flex items-center gap-2 group">
+        <Link href="/dashboard" className="flex items-center gap-2 group">
           <span className="text-white font-bold tracking-widest uppercase text-base">
             MANAGER
           </span>
         </Link>
-
 
 
         {/* User + Logout */}

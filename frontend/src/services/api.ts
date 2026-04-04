@@ -1,9 +1,11 @@
-/// <reference types="vite/client" />
 import axios, {
   type AxiosInstance,
   type AxiosRequestConfig,
   type InternalAxiosRequestConfig,
 } from 'axios'
+
+// ─── SSR guard ────────────────────────────────────────────────────────────────
+const isBrowser = typeof window !== 'undefined'
 
 // ─── Token storage helpers ────────────────────────────────────────────────────
 const KEYS = {
@@ -12,15 +14,17 @@ const KEYS = {
 } as const
 
 export const tokenStorage = {
-  getAccess:      ()          => localStorage.getItem(KEYS.accessToken),
-  getRefresh:     ()          => localStorage.getItem(KEYS.refreshToken),
-  setAccess:      (t: string) => localStorage.setItem(KEYS.accessToken,  t),
-  setRefresh:     (t: string) => localStorage.setItem(KEYS.refreshToken, t),
+  getAccess:      ()          => isBrowser ? localStorage.getItem(KEYS.accessToken) : null,
+  getRefresh:     ()          => isBrowser ? localStorage.getItem(KEYS.refreshToken) : null,
+  setAccess:      (t: string) => { if (isBrowser) localStorage.setItem(KEYS.accessToken,  t) },
+  setRefresh:     (t: string) => { if (isBrowser) localStorage.setItem(KEYS.refreshToken, t) },
   setTokens:      (access: string, refresh: string) => {
+    if (!isBrowser) return
     localStorage.setItem(KEYS.accessToken,  access)
     localStorage.setItem(KEYS.refreshToken, refresh)
   },
   clear: () => {
+    if (!isBrowser) return
     localStorage.removeItem(KEYS.accessToken)
     localStorage.removeItem(KEYS.refreshToken)
   },
@@ -28,7 +32,7 @@ export const tokenStorage = {
 
 // ─── Axios instance ───────────────────────────────────────────────────────────
 const api: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:5000',
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:5000',
   headers: { 'Content-Type': 'application/json' },
   timeout: 15_000,
 })
@@ -68,7 +72,7 @@ api.interceptors.response.use(
     const refreshToken = tokenStorage.getRefresh()
     if (!refreshToken) {
       tokenStorage.clear()
-      window.location.href = '/login'
+      if (isBrowser) window.location.href = '/'
       return Promise.reject(error)
     }
 
@@ -90,7 +94,7 @@ api.interceptors.response.use(
 
     try {
       const { data } = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:5000'}/auth/refresh`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:5000'}/auth/refresh`,
         { refreshToken }
       )
       const newAccessToken: string = data.data.accessToken
@@ -105,7 +109,7 @@ api.interceptors.response.use(
     } catch (refreshError) {
       processQueue(refreshError, null)
       tokenStorage.clear()
-      window.location.href = '/login'
+      if (isBrowser) window.location.href = '/'
       return Promise.reject(refreshError)
 
     } finally {

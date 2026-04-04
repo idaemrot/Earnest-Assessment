@@ -1,8 +1,10 @@
+'use client'
+
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@/context/AuthContext'
 import { isAxiosError } from 'axios'
-import { useToast } from '../context/ToastContext'
+import { useToast } from '@/context/ToastContext'
 
 interface AuthModalProps {
   isOpen: boolean
@@ -53,7 +55,7 @@ function StrengthBar({ password }: { password: string }) {
 
 export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: AuthModalProps) {
   const { login, register } = useAuth()
-  const navigate = useNavigate()
+  const router = useRouter()
   const toast = useToast()
   const overlayRef = useRef<HTMLDivElement>(null)
 
@@ -139,7 +141,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
       if (mode === 'login') {
         await login(email, password)
         onClose()
-        navigate('/dashboard', { replace: true })
+        router.push('/dashboard')
       } else {
         await register(name, email, password)
         toast.success('Account created successfully! You can now sign in.')

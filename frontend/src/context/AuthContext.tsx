@@ -1,3 +1,5 @@
+'use client'
+
 import {
   createContext,
   useContext,
@@ -6,8 +8,8 @@ import {
   useCallback,
   type ReactNode,
 } from 'react'
-import { loginUser, logoutUser, registerUser } from '../services/auth.service'
-import { tokenStorage } from '../services/api'
+import { loginUser, logoutUser, registerUser } from '@/services/auth.service'
+import { tokenStorage } from '@/services/api'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
