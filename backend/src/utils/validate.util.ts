@@ -9,7 +9,10 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
  * Validates register input — email + password.
  * Throws AppError (400) on any validation failure.
  */
-export const validateRegisterInput = (email: unknown, password: unknown): void => {
+export const validateRegisterInput = (name: unknown, email: unknown, password: unknown): void => {
+  if (!name || typeof name !== 'string' || name.trim() === '') {
+    throw new AppError('Name is required', 400)
+  }
   if (!email || typeof email !== 'string' || email.trim() === '') {
     throw new AppError('Email is required', 400)
   }

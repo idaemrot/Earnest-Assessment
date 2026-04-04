@@ -9,6 +9,7 @@ import { tokenBlacklist } from '../utils/tokenBlacklist'
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface RegisterInput {
+  name: string
   email: string
   password: string
 }
@@ -46,10 +47,10 @@ export const authService = {
    * 4. Returns the created user (without password)
    */
   register: async (input: RegisterInput): Promise<SafeUser> => {
-    const { email, password } = input
+    const { name, email, password } = input
 
     // Step 1 — Validate
-    validateRegisterInput(email, password)
+    validateRegisterInput(name, email, password)
 
     // Step 2 — Hash password
     const hashed = await hashPassword(password)
@@ -57,6 +58,7 @@ export const authService = {
     // Step 3 — Persist (Prisma throws P2002 if email already exists)
     const user = await prisma.user.create({
       data: {
+        name: name.trim(),
         email: email.trim().toLowerCase(),
         password: hashed,
       },
@@ -98,7 +100,7 @@ export const authService = {
     }
 
     // Step 4 — Issue tokens
-    const accessToken = generateAccessToken(user.id)
+    const accessToken = generateAccessToken(user.id, user.name, user.email)
     const refreshToken = generateRefreshToken(user.id)
 
     return { accessToken, refreshToken }
@@ -141,7 +143,7 @@ export const authService = {
     // Step 5 — Confirm the user still exists (defensive: account may be deleted)
     const user = await prisma.user.findUnique({
       where: { id: payload.userId },
-      select: { id: true },
+      select: { id: true, name: true, email: true },
     })
 
     if (!user) {
@@ -149,7 +151,7 @@ export const authService = {
     }
 
     // Step 6 — Issue fresh access token
-    const accessToken = generateAccessToken(user.id)
+    const accessToken = generateAccessToken(user.id, user.name, user.email)
 
     return { accessToken }
   },

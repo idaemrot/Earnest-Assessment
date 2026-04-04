@@ -14,6 +14,8 @@ const getSecret = (key: string): string => {
 
 export interface AccessTokenPayload {
   userId: string
+  name: string
+  email: string
   type: 'access'
 }
 
@@ -28,11 +30,11 @@ export interface RefreshTokenPayload {
  * Generates a short-lived JWT access token (default: 15 minutes).
  * Should be sent in Authorization header: `Bearer <token>`
  */
-export const generateAccessToken = (userId: string): string => {
+export const generateAccessToken = (userId: string, name: string, email: string): string => {
   const secret = getSecret('JWT_ACCESS_SECRET')
   const expiresIn = (process.env.JWT_ACCESS_EXPIRES_IN ?? '15m') as SignOptions['expiresIn']
 
-  const payload: AccessTokenPayload = { userId, type: 'access' }
+  const payload: AccessTokenPayload = { userId, name, email, type: 'access' }
   return jwt.sign(payload, secret, { expiresIn })
 }
 

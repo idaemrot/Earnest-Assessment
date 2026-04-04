@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 interface NavbarProps {
   username?: string
@@ -6,11 +6,6 @@ interface NavbarProps {
 }
 
 export default function Navbar({ username = 'User', onLogout }: NavbarProps) {
-  const location = useLocation()
-
-  const navLinks = [
-    { to: '/dashboard', label: 'Dashboard' },
-  ]
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-gray-800 bg-gray-950/80 backdrop-blur-md">
@@ -18,33 +13,12 @@ export default function Navbar({ username = 'User', onLogout }: NavbarProps) {
 
         {/* Logo */}
         <Link to="/dashboard" className="flex items-center gap-2 group">
-          <span className="h-7 w-7 rounded-lg bg-teal-500 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-teal-500/30 group-hover:shadow-teal-500/50 transition-shadow">
-            T
-          </span>
-          <span className="text-white font-semibold tracking-tight text-base">
-            Task<span className="text-teal-400">Flow</span>
+          <span className="text-white font-bold tracking-widest uppercase text-base">
+            MANAGER
           </span>
         </Link>
 
-        {/* Nav Links */}
-        <nav className="hidden sm:flex items-center gap-1">
-          {navLinks.map(({ to, label }) => {
-            const active = location.pathname === to
-            return (
-              <Link
-                key={to}
-                to={to}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                  active
-                    ? 'bg-teal-500/10 text-teal-400 border border-teal-500/30'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-800'
-                }`}
-              >
-                {label}
-              </Link>
-            )
-          })}
-        </nav>
+
 
         {/* User + Logout */}
         <div className="flex items-center gap-3">

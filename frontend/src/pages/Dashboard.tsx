@@ -148,7 +148,7 @@ function Skeleton({ view }: { view: ViewMode }) {
 
 // ─── Dashboard ────────────────────────────────────────────────────────────────
 export default function Dashboard() {
-  const { email, logout }  = useAuth()
+  const { user, logout }  = useAuth()
   const navigate            = useNavigate()
   const toast               = useToast()
 
@@ -296,7 +296,7 @@ export default function Dashboard() {
   // ── Render ────────────────────────────────────────────────────────────────
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100">
-      <Navbar username={email ?? 'User'} onLogout={handleLogout} />
+      <Navbar username={user?.name ?? 'User'} onLogout={handleLogout} />
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6">
 

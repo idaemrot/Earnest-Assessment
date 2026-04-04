@@ -19,8 +19,8 @@ export interface LoginResponse {
  * POST /auth/register
  * Returns the created user object.
  */
-export async function registerUser(email: string, password: string): Promise<AuthUser> {
-  const { data } = await api.post('/auth/register', { email, password })
+export async function registerUser(name: string, email: string, password: string): Promise<AuthUser> {
+  const { data } = await api.post('/auth/register', { name, email, password })
   return data.data.user as AuthUser
 }
 

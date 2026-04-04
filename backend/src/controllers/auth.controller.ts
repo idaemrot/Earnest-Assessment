@@ -26,9 +26,9 @@ export const testAuth = (req: Request, res: Response): void => {
  * 409 → email already taken
  */
 export const register = asyncHandler(async (req: Request, res: Response) => {
-  const { email, password } = req.body
+  const { name, email, password } = req.body
 
-  const user = await authService.register({ email, password })
+  const user = await authService.register({ name, email, password })
 
   res.status(201).json({
     success: true,

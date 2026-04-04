@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express'
+import cors from 'cors'
 import dotenv from 'dotenv'
 import { errorHandler } from './middleware/errorHandler.middleware'
 
@@ -11,6 +12,7 @@ const app = express()
 const port = process.env.PORT || 5000
 
 // ─── Core Middleware ──────────────────────────────────────────────────────────
+app.use(cors())                       // allow cross-origin requests
 app.use(express.json())               // parse JSON bodies
 app.use(express.urlencoded({ extended: true }))  // parse URL-encoded bodies
 

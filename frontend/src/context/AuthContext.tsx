@@ -13,27 +13,27 @@ import { tokenStorage } from '../services/api'
 
 interface AuthState {
   isAuthenticated: boolean
-  email:           string | null
+  user:            { name: string; email: string } | null
   isLoading:       boolean       // true while we check for a stored token on mount
 }
 
 interface AuthContextValue extends AuthState {
   login:    (email: string, password: string) => Promise<void>
-  register: (email: string, password: string) => Promise<void>
+  register: (name: string, email: string, password: string) => Promise<void>
   logout:   () => Promise<void>
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 /**
- * Decode the email from a JWT payload without a library.
+ * Decode the user info from a JWT payload without a library.
  * Returns null if the token is missing or malformed.
  */
-function decodeEmail(token: string | null): string | null {
+function decodeUser(token: string | null): { name: string; email: string } | null {
   if (!token) return null
   try {
     const payload = JSON.parse(atob(token.split('.')[1]))
-    return payload?.email ?? null
+    return payload?.email && payload?.name ? { name: payload.name, email: payload.email } : null
   } catch {
     return null
   }
@@ -46,7 +46,7 @@ const AuthContext = createContext<AuthContextValue | null>(null)
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AuthState>({
     isAuthenticated: false,
-    email:           null,
+    user:            null,
     isLoading:       true,   // start true — bootstrap check
   })
 
@@ -56,7 +56,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (token) {
       setState({
         isAuthenticated: true,
-        email:           decodeEmail(token),
+        user:            decodeUser(token),
         isLoading:       false,
       })
     } else {
@@ -69,21 +69,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { accessToken } = await loginUser(email, password)
     setState({
       isAuthenticated: true,
-      email:           decodeEmail(accessToken) ?? email,
+      user:            decodeUser(accessToken) ?? { name: 'User', email },
       isLoading:       false,
     })
   }, [])
 
   // ── Register ───────────────────────────────────────────────────────────────
-  const register = useCallback(async (email: string, password: string) => {
-    await registerUser(email, password)
+  const register = useCallback(async (name: string, email: string, password: string) => {
+    await registerUser(name, email, password)
     // Registration does not auto-login — redirect to login page
   }, [])
 
   // ── Logout ─────────────────────────────────────────────────────────────────
   const logout = useCallback(async () => {
     await logoutUser()
-    setState({ isAuthenticated: false, email: null, isLoading: false })
+    setState({ isAuthenticated: false, user: null, isLoading: false })
   }, [])
 
   return (
