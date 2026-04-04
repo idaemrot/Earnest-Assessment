@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import type { Task, TaskStatus } from './TaskCard'
+import type { Task, TaskStatus } from '../services/task.service'
 
 interface TaskModalProps {
   isOpen: boolean
