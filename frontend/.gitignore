@@ -3,27 +3,22 @@ node_modules/
 
 # ─── Build output ─────────────────────────────────────────────────────────────
 dist/
+dist-ssr/
 build/
 
 # ─── Environment variables ─────────────────────────────────────────────────────
-# Copy .env.example → .env and fill in your secrets — never commit .env
 .env
 .env.local
 .env.*.local
 .env.production
 
-# ─── Prisma ───────────────────────────────────────────────────────────────────
-# Generated client is rebuilt by `prisma generate` — no need to track it
-prisma/migrations/dev.db
-prisma/migrations/dev.db-journal
-*.db
-*.db-journal
+# ─── Vite local cache ─────────────────────────────────────────────────────────
+.vite/
 
 # ─── TypeScript cache ─────────────────────────────────────────────────────────
 *.tsbuildinfo
 
 # ─── Logs ─────────────────────────────────────────────────────────────────────
-logs/
 *.log
 npm-debug.log*
 

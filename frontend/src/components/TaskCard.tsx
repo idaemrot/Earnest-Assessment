@@ -1,13 +1,13 @@
 export type TaskStatus = 'pending' | 'completed'
 
 export interface Task {
-  id: string
-  title: string
+  id:          string
+  title:       string
   description?: string | null
-  status: TaskStatus
-  userId: string
-  createdAt: string
-  updatedAt: string
+  status:      TaskStatus
+  userId:      string
+  createdAt:   string
+  updatedAt:   string
 }
 
 interface TaskCardProps {
