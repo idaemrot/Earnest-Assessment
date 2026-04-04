@@ -1,14 +1,4 @@
-export type TaskStatus = 'pending' | 'completed'
-
-export interface Task {
-  id:          string
-  title:       string
-  description?: string | null
-  status:      TaskStatus
-  userId:      string
-  createdAt:   string
-  updatedAt:   string
-}
+import type { Task } from '../services/task.service'
 
 interface TaskCardProps {
   task: Task

@@ -7,12 +7,6 @@ import Dashboard from './pages/Dashboard'
 
 // ─── Route guards ─────────────────────────────────────────────────────────────
 
-/** Redirect authenticated users away from auth pages */
-function PublicRoute({ children }: { children: ReactNode }) {
-  const { isAuthenticated, isLoading } = useAuth()
-  if (isLoading) return <AppSpinner />
-  return isAuthenticated ? <Navigate to="/dashboard" replace /> : <>{children}</>
-}
 
 /** Redirect unauthenticated users to login */
 function ProtectedRoute({ children }: { children: ReactNode }) {
