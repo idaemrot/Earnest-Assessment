@@ -1,5 +1,6 @@
-import express, { Request, Response, NextFunction } from 'express'
+import express, { Request, Response } from 'express'
 import dotenv from 'dotenv'
+import { errorHandler } from './middleware/errorHandler.middleware'
 
 import authRoutes from './routes/auth.routes'
 import taskRoutes from './routes/task.routes'
@@ -27,13 +28,7 @@ app.use((req: Request, res: Response) => {
 })
 
 // ─── Global Error Handler ─────────────────────────────
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  console.error('[Error]', err.stack)
-  res.status(err.status ?? 500).json({
-    success: false,
-    message: err.message ?? 'Internal Server Error',
-  })
-})
+app.use(errorHandler)
 
 // ─── Start ────────────────────────────────────────────
 app.listen(port, () => {

@@ -21,12 +21,9 @@ export const testAuth = (req: Request, res: Response): void => {
  * POST /auth/register
  * Body: { email: string, password: string }
  *
- * Success 201:
- *   { success: true, message: "Registration successful", data: { id, email, createdAt } }
- *
- * Errors:
- *   400 — validation failure
- *   409 — email already taken
+ * 201 → { success, message, data: { user } }
+ * 400 → validation failure
+ * 409 → email already taken
  */
 export const register = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body
@@ -46,12 +43,9 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
  * POST /auth/login
  * Body: { email: string, password: string }
  *
- * Success 200:
- *   { success: true, data: { accessToken, refreshToken } }
- *
- * Errors:
- *   400 — missing fields
- *   401 — invalid credentials
+ * 200 → { success, message, data: { accessToken, refreshToken } }
+ * 400 → missing fields
+ * 401 → invalid credentials
  */
 export const login = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body
@@ -64,3 +58,48 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
     data: tokens,
   })
 })
+
+// ─── Refresh ──────────────────────────────────────────────────────────────────
+
+/**
+ * POST /auth/refresh
+ * Body: { refreshToken: string }
+ *
+ * 200 → { success, data: { accessToken } }
+ * 400 → missing token
+ * 401 → expired, revoked, or invalid token
+ */
+export const refresh = asyncHandler(async (req: Request, res: Response) => {
+  const { refreshToken } = req.body
+
+  const result = await authService.refresh(refreshToken)
+
+  res.status(200).json({
+    success: true,
+    message: 'Access token refreshed',
+    data: result,
+  })
+})
+
+// ─── Logout ───────────────────────────────────────────────────────────────────
+
+/**
+ * POST /auth/logout
+ * Body: { refreshToken: string }
+ *
+ * Revokes the refresh token by adding it to the in-memory blacklist.
+ * Idempotent — safe to call even if the token is already revoked or missing.
+ *
+ * 200 → { success, message }
+ */
+export const logout = (req: Request, res: Response): void => {
+  const { refreshToken } = req.body
+
+  // Synchronous — no async needed (in-memory Set operation)
+  authService.logout(refreshToken)
+
+  res.status(200).json({
+    success: true,
+    message: 'Logged out successfully',
+  })
+}

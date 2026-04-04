@@ -7,13 +7,18 @@ import {
   updateTask,
   deleteTask,
 } from '../controllers/task.controller'
+import { authenticate } from '../middleware/auth.middleware'
 
 const router = Router()
 
-// Health check
+// ── Public ─────────────────────────────────────────────────────────────────
+// Health check — no auth required
 router.get('/test', testTask)
 
-// Task CRUD endpoints (placeholders)
+// ── Protected ──────────────────────────────────────────────────────────────
+// All task CRUD endpoints require a valid access token
+router.use(authenticate)
+
 router.get('/', getAllTasks)
 router.get('/:id', getTaskById)
 router.post('/', createTask)
